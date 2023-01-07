@@ -3,7 +3,10 @@ package br.com.alura.aluvery.ui.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -44,13 +47,25 @@ fun ProductFormScreen() {
         )
 
         var name by remember { mutableStateOf("") }
-        TextField(value = name, onValueChange = { name = it })
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text(text = "Nome") }
+        )
 
         var price by remember { mutableStateOf("") }
-        TextField(value = price, onValueChange = { price = it })
+        TextField(
+            value = price,
+            onValueChange = { price = it },
+            label = { Text(text = "Preço") }
+        )
 
         var description by remember { mutableStateOf("") }
-        TextField(value = description, onValueChange = { description = it })
+        TextField(
+            value = description,
+            onValueChange = { description = it },
+            label = { Text(text = "Descrição") }
+        )
 
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Salvar")

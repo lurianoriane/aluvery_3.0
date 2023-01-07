@@ -32,19 +32,19 @@ fun HomeScreen(
             },
             Modifier
                 .padding(16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
         val searchedProducts = remember(text) {
             if (text.isNotBlank()) {
                 sampleProducts.filter { product ->
                     product.name.contains(
                         text,
-                        ignoreCase = true,
+                        ignoreCase = true
                     ) ||
-                            product.description?.contains(
-                                text,
-                                ignoreCase = true,
-                            ) ?: false
+                        product.description?.contains(
+                            text,
+                            ignoreCase = true
+                        ) ?: false
                 }
             } else emptyList()
         }
@@ -69,7 +69,7 @@ fun HomeScreen(
                 items(searchedProducts) { p ->
                     CardProductItem(
                         product = p,
-                        Modifier.padding(horizontal = 16.dp),
+                        Modifier.padding(horizontal = 16.dp)
                     )
                 }
             }
@@ -94,7 +94,7 @@ fun HomeScreenWithSearchTextPreview() {
         Surface {
             HomeScreen(
                 sampleSections,
-                searchText = "a",
+                searchText = "a"
             )
         }
     }
