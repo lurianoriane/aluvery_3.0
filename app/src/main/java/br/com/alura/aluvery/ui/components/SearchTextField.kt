@@ -33,7 +33,8 @@ fun SearchTextField(
         },
         placeholder = {
             Text("O que você procura?")
-        })
+        }
+    )
 }
 
 @Preview(showBackground = true)
@@ -43,7 +44,7 @@ fun SearchTextFieldPreview() {
         Surface {
             SearchTextField(
                 "",
-                onSearchChange = {},
+                onSearchChange = {}
             )
         }
     }
@@ -56,7 +57,7 @@ fun SearchTextFieldWithSearchTextPreview() {
         Surface {
             SearchTextField(
                 searchText = "a",
-                onSearchChange = {},
+                onSearchChange = {}
             )
         }
     }

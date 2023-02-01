@@ -1,6 +1,7 @@
 package br.com.alura.aluvery.ui.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -13,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.alura.aluvery.model.Product
 import br.com.alura.aluvery.ui.theme.AluveryTheme
+import java.math.BigDecimal
 
 class ProductFormActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,11 +72,24 @@ fun ProductFormScreen() {
         TextField(
             value = description,
             onValueChange = { description = it },
-            Modifier.fillMaxWidth().height(100.dp),
+            Modifier.fillMaxWidth().heightIn(min = 100.dp),
             label = { Text(text = "Descrição") }
         )
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = {
+            val convertedPrice = try {
+                BigDecimal(price)
+            } catch (e: java.lang.NumberFormatException) {
+                BigDecimal.ZERO
+            }
+            val product = Product(
+                name = name,
+                image = url,
+                price = convertedPrice,
+                description = description
+            )
+            Log.i("ProductFormActivity", "ProductFormScreen: $product")
+        }) {
             Text(text = "Salvar")
         }
     }

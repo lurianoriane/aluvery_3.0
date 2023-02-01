@@ -76,7 +76,7 @@ private fun CardProductItemPreview() {
                 product = Product(
                     name = "teste",
                     price = BigDecimal("9.99")
-                ),
+                )
             )
         }
     }
@@ -91,7 +91,7 @@ fun CardProductItemWithDescriptionPreview() {
                 product = Product(
                     "teste",
                     BigDecimal("9.99"),
-                    description = LoremIpsum(50).values.first(),
+                    description = LoremIpsum(50).values.first()
                 )
             )
         }
