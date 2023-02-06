@@ -23,18 +23,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alura.aluvery.R
+import br.com.alura.aluvery.dao.ProductDao
 import br.com.alura.aluvery.model.Product
 import br.com.alura.aluvery.ui.theme.AluveryTheme
 import coil.compose.AsyncImage
 import java.math.BigDecimal
+import java.text.DecimalFormat
 
 class ProductFormActivity : ComponentActivity() {
+    private val dao = ProductDao()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AluveryTheme() {
                 Surface() {
-                    ProductFormScreen()
+                    ProductFormScreen(onSaveClick = { product ->
+                        dao.save(product)
+                        finish()
+                    })
                 }
             }
         }
@@ -42,7 +49,7 @@ class ProductFormActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProductFormScreen() {
+fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
     Column(
         Modifier
             .fillMaxSize()
@@ -63,7 +70,9 @@ fun ProductFormScreen() {
             AsyncImage(
                 model = url,
                 contentDescription = null,
-                Modifier.fillMaxWidth().height(200.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.placeholder),
                 error = painterResource(id = R.drawable.placeholder)
@@ -74,7 +83,10 @@ fun ProductFormScreen() {
             onValueChange = { url = it },
             Modifier.fillMaxWidth(),
             label = { Text(text = "Url da imagem") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Next)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Uri,
+                imeAction = ImeAction.Next
+            )
         )
         var name by remember { mutableStateOf("") }
         TextField(
@@ -82,17 +94,33 @@ fun ProductFormScreen() {
             onValueChange = { name = it },
             Modifier.fillMaxWidth(),
             label = { Text(text = "Nome") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next, capitalization = KeyboardCapitalization.Words)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next,
+                capitalization = KeyboardCapitalization.Words
+            )
 
         )
 
         var price by remember { mutableStateOf("") }
+        val formatter = remember { DecimalFormat("#.##") }
         TextField(
             value = price,
-            onValueChange = { price = it },
+            onValueChange = {
+                try {
+                    price = formatter.format(BigDecimal(it))
+                } catch (e: java.lang.IllegalArgumentException) {
+                    if (it.isBlank()) {
+                        price = it
+                    }
+                }
+            },
             Modifier.fillMaxWidth(),
             label = { Text(text = "Preço") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
 
         )
 
@@ -100,9 +128,14 @@ fun ProductFormScreen() {
         TextField(
             value = description,
             onValueChange = { description = it },
-            Modifier.fillMaxWidth().heightIn(min = 100.dp),
+            Modifier
+                .fillMaxWidth()
+                .heightIn(min = 100.dp),
             label = { Text(text = "Descrição") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Sentences)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Sentences
+            )
 
         )
 
@@ -119,6 +152,7 @@ fun ProductFormScreen() {
                 description = description
             )
             Log.i("ProductFormActivity", "ProductFormScreen: $product")
+            onSaveClick(product)
         }) {
             Text(text = "Salvar")
         }
